@@ -194,36 +194,9 @@ Conexão via navegador em [hivemq.com/demos/websocket-client](https://www.hivemq
 <img width="1446" height="978" alt="Screenshot 2026-06-15 142008" src="https://github.com/user-attachments/assets/f6f7901b-f230-4ab6-ad00-4223720145bb" />
 
 
-### Teste 2 — Linha de comando (mosquitto_sub / mosquitto_pub)
+### Teste 2 — Linha de comando (mosquitto_sub)
 
-Subscribe com wildcard `#` capturando todos os tópicos da frota:
-
-```bash
-mosquitto_sub -h SEU_HOST.hivemq.cloud -p 8883 \
-  -u SEU_USUARIO -P SUA_SENHA \
-  --tls-use-os-certs \
-  -t "frota/empresa/#" -v
-```
-
-Publish manual simulando o dashboard enviando um comando:
-
-```bash
-mosquitto_pub -h SEU_HOST.hivemq.cloud -p 8883 \
-  -u SEU_USUARIO -P SUA_SENHA \
-  --tls-use-os-certs \
-  -t "frota/empresa/veiculo01/comando" \
-  -m "PARAR" -q 2
-```
-
-<!-- Adicione o print do terminal abaixo -->
-<!-- ![Teste CLI Mosquitto](docs/teste-mosquitto-cli.png) -->
-
-### Teste 3 — MQTT Explorer
-
-Conexão visual mostrando a hierarquia de tópicos em tempo real com os payloads JSON de cada veículo.
-
-<!-- Adicione o print do MQTT Explorer abaixo -->
-<!-- ![Teste MQTT Explorer](docs/teste-mqtt-explorer.png) -->
+<img width="1442" height="617" alt="Screenshot 2026-06-15 154316" src="https://github.com/user-attachments/assets/598619d0-8068-45ad-8078-d8b2be668fc4" />
 
 ---
 
