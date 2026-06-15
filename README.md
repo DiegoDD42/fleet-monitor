@@ -173,9 +173,9 @@ npm run dev
 
 ### 4. Rode os dispositivos simulados
 Acesse os projetos no Wokwi e clique em **▶ Start** em cada um:
-- [Veículo 01 — Wokwi](#) [https://wokwi.com/projects/466914333736190977]
-- [Veículo 02 — Wokwi](#) [https://wokwi.com/projects/466914215569002497]
-- [Veículo 03 — Wokwi](#) [https://wokwi.com/projects/466914471717281793]
+- [Veículo 01 — Wokwi](https://wokwi.com/projects/466914333736190977)
+- [Veículo 02 — Wokwi](https://wokwi.com/projects/466914215569002497)
+- [Veículo 03 — Wokwi](https://wokwi.com/projects/466914471717281793)
 
 ---
 
@@ -280,3 +280,4 @@ fleet-monitor/
 - [MQTT.js](https://github.com/mqttjs/MQTT.js)
 - [React Leaflet](https://react-leaflet.js.org/)
 - [Recharts](https://recharts.org/)
+- [React Bootstrap](https://react-bootstrap.netlify.app/)
