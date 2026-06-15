@@ -181,7 +181,7 @@ Acesse os projetos no Wokwi e clique em **▶ Start** em cada um:
 
 ## 🌐 Aplicação hospedada
 
-🔗 **[https://fleet-monitor-mf9ru041i-diego-dantas-projects.vercel.app/](https://fleet-monitor-mf9ru041i-diego-dantas-projects.vercel.app/)** 
+🔗 **[fleet-monitor-seven.vercel.app](fleet-monitor-seven.vercel.app)** 
 
 ---
 
