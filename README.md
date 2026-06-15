@@ -8,7 +8,11 @@
 
 | Nome completo | 
 |---|
-| <!-- Adicione os nomes aqui --> |
+| Diego Dantas Domingues |
+| Heitor Marques Magalhães |
+| João Pedro Ribeiro Lourenço |
+| José Marcio Silva Pinho |
+| Marcos Vinicius Cardoso de Araújo |
 
 ---
 
@@ -22,31 +26,62 @@ Veículos simulados (ESP32 no Wokwi) publicam periodicamente posição (lat/lng)
 
 ## 🏗️ Diagrama de Arquitetura
 
-<!-- Substitua a linha abaixo pela sua imagem de diagrama -->
-<!-- Exemplo: ![Diagrama de Arquitetura](docs/diagrama.png) -->
+```mermaid
+graph TD
+    %% Estilos de Subgraphs e Nodes Gerais
+    classDef wokwi fill:#064e3b,stroke:#0f766e,color:#ffffff,stroke-width:2px;
+    classDef hivemq fill:#3b0764,stroke:#581c87,color:#ffffff,stroke-width:2px;
+    classDef dashboard fill:#1e3a8a,stroke:#1d4ed8,color:#ffffff,stroke-width:2px;
+    classDef mosquitto fill:#374151,stroke:#4b5563,color:#ffffff,stroke-width:2px;
+    classDef vercel fill:#14532d,stroke:#16a34a,color:#ffffff,stroke-width:2px;
+    classDef topicos fill:#7c2d12,stroke:#9a3412,color:#ffffff,stroke-width:2px;
+    classDef innerNode fill:#022c22,stroke:#0f766e,color:#ffffff,stroke-width:1px;
+    classDef innerDash fill:#172554,stroke:#1d4ed8,color:#ffffff,stroke-width:1px;
 
+    %% --- Bloco Wokwi ---
+    subgraph Wokwi ["Wokwi (ESP32) dispositivos simulados"]
+        V1["Veículo 1<br>GPS + status"]
+        V2["Veículo 2<br>GPS + status"]
+        VN["Veículo N<br>..."]
+    end
+    class Wokwi wokwi;
+    class V1,V2,VN innerNode;
+
+    %% --- Bloco HiveMQ ---
+    HiveMQ["HiveMQ Cloud<br>broker MQTT<br>TLS + auth<br>porta 8883 / 8884 WS"]
+    class HiveMQ hivemq;
+
+    %% --- Bloco Mosquitto ---
+    Mosquitto["Mosquitto local<br>teste bridge / CLI"]
+    class Mosquitto mosquitto;
+
+    %% --- Bloco Dashboard ---
+    subgraph Dashboard ["Dashboard React Vite + React Bootstrap"]
+        Mapa["Mapa tempo real<br>Leaflet.js"]
+        Graficos["Gráficos / comandos<br>Recharts + MQTT.js"]
+    end
+    class Dashboard dashboard;
+    class Mapa,Graficos innerDash;
+
+    %% --- Bloco Vercel ---
+    Vercel["Vercel deploy<br>app pública"]
+    class Vercel vercel;
+
+    %% --- Bloco Tópicos ---
+    Topicos["<b>Tópicos MQTT</b><br><br>frota/empresa/veiculo{id}/posicao — lat, lng, velocidade (QoS 1, retained)<br>frota/empresa/veiculo{id}/status — online/offline/LWT (QoS 1, retained)<br>frota/empresa/veiculo{id}/comando — PARAR / BUZINAR (QoS 1)<br>frota/empresa/+/posicao — wildcard: todas posições (dashboard)<br>frota/empresa/# — wildcard #: tudo da frota"]
+    class Topicos topicos;
+
+    %% --- Conexões / Fluxos ---
+    Wokwi -->|publish QoS 1| HiveMQ
+    HiveMQ -->|bridge| Mosquitto
+    HiveMQ -->|subscribe WS QoS 0/1| Dashboard
+    Dashboard -.->|publish cmd| HiveMQ
+    Dashboard --> Vercel
+
+    %% Ajuste de posicionamento visual para os tópicos ficarem abaixo
+    HiveMQ --- Topicos
+    style Topicos text-align:left;
 ```
-┌─────────────────────┐        MQTT/TLS 8883       ┌─────────────────────────┐
-│   Wokwi (ESP32)     │ ─────────────────────────► │                         │
-│                     │                             │    HiveMQ Cloud         │
-│  ┌───────────────┐  │ ◄───────────────────────── │    (broker na nuvem)    │
-│  │  Veículo 01   │  │     QoS 2 (comandos)        │                         │
-│  │  Veículo 02   │  │                             └────────────┬────────────┘
-│  │  Veículo 03   │  │                                          │
-│  └───────────────┘  │                             MQTT/WS TLS 8884
-└─────────────────────┘                                          │
-                                                    ┌────────────▼────────────┐
-┌─────────────────────┐                             │                         │
-│  Mosquitto (local)  │ ── mosquitto_sub/pub ──►    │   Dashboard React       │
-│  Teste de bridge    │                             │   (Vite + React Bootstrap│
-└─────────────────────┘                             │   + Leaflet + Recharts) │
-                                                    │                         │
-                                                    │   Deploy: Vercel        │
-                                                    └─────────────────────────┘
-```
-
----
-
 ## 📡 Tópicos MQTT
 
 | Tópico | Direção | QoS | Retained | Descrição |
@@ -138,9 +173,9 @@ npm run dev
 
 ### 4. Rode os dispositivos simulados
 Acesse os projetos no Wokwi e clique em **▶ Start** em cada um:
-- [Veículo 01 — Wokwi](#) <!-- adicione o link público -->
-- [Veículo 02 — Wokwi](#) <!-- adicione o link público -->
-- [Veículo 03 — Wokwi](#) <!-- adicione o link público -->
+- [Veículo 01 — Wokwi](#) [https://wokwi.com/projects/466914333736190977]
+- [Veículo 02 — Wokwi](#) [https://wokwi.com/projects/466914215569002497]
+- [Veículo 03 — Wokwi](#) [https://wokwi.com/projects/466914471717281793]
 
 ---
 
@@ -156,24 +191,8 @@ Acesse os projetos no Wokwi e clique em **▶ Start** em cada um:
 
 Conexão via navegador em [hivemq.com/demos/websocket-client](https://www.hivemq.com/demos/websocket-client/) assinando `frota/empresa/#`. As mensagens abaixo foram recebidas com os três veículos simulados rodando simultaneamente:
 
-```
-* 2026-06-15 09:18:06  Topic: frota/empresa/veiculo01/posicao  QoS:1  Retained
-{"veiculo":"veiculo01","lat":-18.916620,"lng":-48.275040,"velocidade":64,"bateria":100,"parado":false,"ts":28428}
+<img width="1446" height="978" alt="Screenshot 2026-06-15 142008" src="https://github.com/user-attachments/assets/f6f7901b-f230-4ab6-ad00-4223720145bb" />
 
-* 2026-06-15 09:18:06  Topic: frota/empresa/veiculo02/posicao  QoS:1  Retained
-{"veiculo":"veiculo02","lat":-18.923948,"lng":-48.288952,"velocidade":65,"bateria":100,"parado":false,"ts":15607}
-
-* 2026-06-15 09:18:06  Topic: frota/empresa/veiculo03/posicao  QoS:1  Retained
-{"veiculo":"veiculo03","lat":-18.940800,"lng":-48.260498,"velocidade":62,"bateria":100,"parado":false,"ts":16238}
-
-* 2026-06-15 09:18:06  Topic: frota/empresa/veiculo01/status   QoS:1  Retained
-{"veiculo":"veiculo01","status":"offline","motivo":"LWT"}
-```
-
-> O status `offline` com `motivo: LWT` confirma o funcionamento do **Last Will and Testament**: ao encerrar a simulação, o broker publicou automaticamente o LWT de cada veículo.
-
-<!-- Adicione o print do HiveMQ WebSocket Client abaixo -->
-<!-- ![Teste HiveMQ WebSocket Client](docs/teste-hivemq-websocket.png) -->
 
 ### Teste 2 — Linha de comando (mosquitto_sub / mosquitto_pub)
 
@@ -215,7 +234,7 @@ fleet-monitor/
 ├── wokwi/
 │   ├── sketch.ino          # Firmware ESP32 (mesmo código, VEHICLE_ID diferente por projeto)
 │   ├── diagram.json        # Circuito do ESP32 no Wokwi
-│   └── wokwi.toml          # Configuração do projeto Wokwi
+│   └── libraries.txt       # Bibliotecas usadas no Wokwi
 ├── src/
 │   ├── components/
 │   │   ├── MapView.jsx     # Mapa Leaflet com marcadores dos veículos
