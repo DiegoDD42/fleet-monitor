@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "author": "Fleet Monitor",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp32",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -50,
+      "left": 130,
+      "attrs": { "color": "green", "label": "Online" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": -50,
+      "left": 170,
+      "attrs": { "color": "red", "label": "Parado" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 20,
+      "left": 130,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 20,
+      "left": 170,
+      "attrs": { "value": "220" }
+    }
+  ],
+  "connections": [
+    ["esp32:2",   "r1:1", "green", []],
+    ["r1:2",      "led1:A", "green", []],
+    ["led1:K",    "esp32:GND.1", "black", []],
+    ["esp32:4",   "r2:1", "red", []],
+    ["r2:2",      "led2:A", "red", []],
+    ["led2:K",    "esp32:GND.1", "black", []],
+    [ "esp32:TX", "$serialMonitor:RX", "", [] ], 
+    [ "esp32:RX", "$serialMonitor:TX", "", [] ]
+  ],
+  "libraries": [
+    { "name": "PubSubClient",  "version": "2.8.0" },
+    { "name": "ArduinoJson",   "version": "6.21.3" }
+  ]
+}
