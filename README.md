@@ -148,7 +148,7 @@ graph TD
 
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/SEU_USUARIO/fleet-monitor.git
+git clone https://github.com/DiegoDD42/fleet-monitor.git
 cd fleet-monitor
 ```
 
