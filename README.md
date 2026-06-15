@@ -181,7 +181,7 @@ Acesse os projetos no Wokwi e clique em **▶ Start** em cada um:
 
 ## 🌐 Aplicação hospedada
 
-🔗 **[fleet-monitor-seven.vercel.app](fleet-monitor-seven.vercel.app)** 
+🔗 **[https://fleet-monitor-seven.vercel.app/](https://fleet-monitor-seven.vercel.app/)** 
 
 ---
 
